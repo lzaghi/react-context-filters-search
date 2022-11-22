@@ -15,11 +15,14 @@ function useFetch(url) {
   }
 
   useEffect(() => {
-    fetch(url)
-      .then((request) => request.json())
-      .then((response) => filterResponseKeys(response.results))
-      .catch((e) => setError(e))
-      .finally(setLoading(false));
+    const fetchPlanets = () => {
+      fetch(url)
+        .then((request) => request.json())
+        .then((response) => filterResponseKeys(response.results))
+        .catch((e) => setError(e))
+        .finally(setLoading(false));
+    };
+    fetchPlanets();
   }, [url]);
 
   return { data, loading, error };
