@@ -5,18 +5,13 @@ export const NameContext = createContext();
 
 function NameProvider({ children }) {
   const [filteredName, setFilteredName] = useState('');
-
-  function filterSearch(data) {
-    const filteredData = data.filter((el) => (
-      el.name.includes(filteredName)
-    ));
-    return filteredData;
-  }
+  const [filters, setFilters] = useState({});
 
   const values = {
     filteredName,
     setFilteredName,
-    filterSearch,
+    filters,
+    setFilters,
   };
 
   return (

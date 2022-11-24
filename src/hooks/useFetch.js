@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 function useFetch(url) {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   function filterResponseKeys(response) {
@@ -15,6 +15,7 @@ function useFetch(url) {
   }
 
   useEffect(() => {
+    setLoading(true);
     const fetchPlanets = () => {
       fetch(url)
         .then((request) => request.json())
