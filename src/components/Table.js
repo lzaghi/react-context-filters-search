@@ -5,21 +5,17 @@ import { NameContext } from '../context/FilterProvider';
 function Table() {
   const { data, error } = useContext(DataContext);
   const { filteredName, filters } = useContext(NameContext);
-  // const [search, setSearch] = useState([]);
 
   function searchFilter(list) {
-    const filteredData = list.filter((el) => (
+    const filteredBySearch = list.filter((el) => (
       el.name.toLowerCase().includes(filteredName.toLowerCase())
     ));
-
-    return filteredData;
+    return filteredBySearch;
   }
 
-  function comparisonFilter(list) {
-    const { column, comparison, number } = filters;
-
+  function comparisonFilter(list, filter) {
+    const { column, comparison, number } = filter;
     let filterByNumbers = [];
-
     switch (comparison) {
     case 'maior que':
       filterByNumbers = list.filter((el) => +el[column] > +number);
@@ -34,8 +30,23 @@ function Table() {
       filterByNumbers = list;
       break;
     }
-
+    console.log('att', filterByNumbers);
     return filterByNumbers;
+  }
+
+  function filteredData() {
+    const searchFiltered = searchFilter(data);
+
+    if (filters.length === 0) return searchFiltered;
+
+    let comparisonFiltered = searchFiltered;
+    filters.map((filter) => {
+      const filtered = comparisonFilter(comparisonFiltered, filter);
+      comparisonFiltered = filtered;
+      return comparisonFiltered;
+    });
+
+    return comparisonFiltered;
   }
 
   if (error) { <h1>Algo deu errado!</h1>; }
@@ -64,7 +75,7 @@ function Table() {
               </tr>
             </thead>
             <tbody>
-              {comparisonFilter(searchFilter(data)).map((planet, index) => (
+              {filteredData().map((planet, index) => (
                 <tr key={ index }>
                   <td>{planet.name}</td>
                   <td>{planet.rotation_period}</td>

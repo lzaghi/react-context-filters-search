@@ -5,7 +5,7 @@ export const NameContext = createContext();
 
 function NameProvider({ children }) {
   const [filteredName, setFilteredName] = useState('');
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState([]);
 
   const values = {
     filteredName,
