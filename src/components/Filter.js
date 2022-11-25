@@ -7,7 +7,12 @@ function Filter() {
   const [comparison, setComparison] = useState('maior que');
   const [number, setNumber] = useState(0);
 
-  const { setFilteredName, filters, setFilters } = useContext(NameContext);
+  const [columnSort, setColumnSort] = useState('population');
+  const [typeSort, setTypeSort] = useState('ASC');
+
+  const {
+    setFilteredName,
+    filters, setFilters, setSortFilter } = useContext(NameContext);
 
   function setFilter() {
     setFilters([
@@ -16,6 +21,17 @@ function Filter() {
         column,
         comparison,
         number,
+      },
+    ]);
+  }
+
+  function setSort() {
+    setSortFilter([
+      {
+        order: {
+          column: columnSort,
+          sort: typeSort,
+        },
       },
     ]);
   }
@@ -93,15 +109,51 @@ function Filter() {
       >
         Filtrar
       </button>
-      {filters.length > 0
-        && (
-          <button
-            data-testid="button-remove-filters"
-            type="button"
-            onClick={ removeAllFilters }
-          >
-            Remover filtros
-          </button>)}
+
+      <select
+        data-testid="column-sort"
+        name="sort"
+        value={ columnSort }
+        onChange={ (e) => setColumnSort(e.target.value) }
+      >
+        <option value="population">population</option>
+        <option value="orbital_period">orbital_period</option>
+        <option value="diameter">diameter</option>
+        <option value="rotation_period">rotation_period</option>
+        <option value="surface_water">surface_water</option>
+      </select>
+      <label htmlFor="asc">
+        <input
+          data-testid="column-sort-input-asc"
+          type="radio"
+          name="sort"
+          value="ASC"
+          id="asc"
+          onChange={ (e) => setTypeSort(e.target.value) }
+          checked={ typeSort === 'ASC' }
+        />
+        Ascendente
+      </label>
+      <label htmlFor="desc">
+        <input
+          data-testid="column-sort-input-desc"
+          type="radio"
+          name="sort"
+          value="DESC"
+          id="desc"
+          onChange={ (e) => setTypeSort(e.target.value) }
+          checked={ typeSort === 'DESC' }
+        />
+        Descendente
+      </label>
+      <button
+        data-testid="column-sort-button"
+        type="button"
+        onClick={ setSort }
+      >
+        Ordenar
+      </button>
+
       {filters.length > 0
         && filters.map((filter, index) => (
           <div key={ index } data-testid="filter">
@@ -116,7 +168,15 @@ function Filter() {
             </button>
           </div>
         ))}
-      {console.log(filters.map((filter) => filter.column))}
+      {filters.length > 0
+        && (
+          <button
+            data-testid="button-remove-filters"
+            type="button"
+            onClick={ removeAllFilters }
+          >
+            Remover filtros
+          </button>)}
     </div>
   );
 }

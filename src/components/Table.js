@@ -4,7 +4,7 @@ import { NameContext } from '../context/FilterProvider';
 
 function Table() {
   const { data, error } = useContext(DataContext);
-  const { filteredName, filters } = useContext(NameContext);
+  const { filteredName, filters, sortFilter } = useContext(NameContext);
 
   function searchFilter(list) {
     const filteredBySearch = list.filter((el) => (
@@ -34,8 +34,29 @@ function Table() {
     return filterByNumbers;
   }
 
+  function handleSort(arr) {
+    for (let i = arr.length - 1; i >= 0; i -= 1) {
+      if (arr[i][sortFilter[0].order.column] === 'unknown') {
+        arr.push(arr.splice(arr.indexOf(arr[i]), 1)[0]);
+      }
+    }
+
+    if (sortFilter[0].order.sort === 'ASC') {
+      arr = arr.sort((a, b) => (
+        a[sortFilter[0].order.column] - b[sortFilter[0].order.column]));
+    } else {
+      arr = arr.sort((a, b) => (
+        b[sortFilter[0].order.column] - a[sortFilter[0].order.column]));
+    }
+    return arr;
+  }
+
   function filteredData() {
-    const searchFiltered = searchFilter(data);
+    let list = data;
+
+    if (sortFilter.length !== 0) list = handleSort(list);
+
+    const searchFiltered = searchFilter(list);
 
     if (filters.length === 0) return searchFiltered;
 
@@ -77,7 +98,7 @@ function Table() {
             <tbody>
               {filteredData().map((planet, index) => (
                 <tr key={ index }>
-                  <td>{planet.name}</td>
+                  <td data-testid="planet-name">{planet.name}</td>
                   <td>{planet.rotation_period}</td>
                   <td>{planet.orbital_period}</td>
                   <td>{planet.diameter}</td>
