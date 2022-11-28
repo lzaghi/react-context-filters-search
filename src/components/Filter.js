@@ -6,7 +6,6 @@ function Filter() {
   const [column, setColumn] = useState('population');
   const [comparison, setComparison] = useState('maior que');
   const [number, setNumber] = useState(0);
-
   const [columnSort, setColumnSort] = useState('population');
   const [typeSort, setTypeSort] = useState('ASC');
 
@@ -163,6 +162,7 @@ function Filter() {
             <button
               type="button"
               onClick={ () => removeFilter(filter) }
+              data-testid="button-remove-filter"
             >
               <HiTrash />
             </button>

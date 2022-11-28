@@ -17,18 +17,14 @@ function Table() {
     const { column, comparison, number } = filter;
     let filterByNumbers = [];
     switch (comparison) {
-    case 'maior que':
-      filterByNumbers = list.filter((el) => +el[column] > +number);
-      break;
     case 'menor que':
       filterByNumbers = list.filter((el) => +el[column] < +number);
-      break;
+      return filterByNumbers;
     case 'igual a':
       filterByNumbers = list.filter((el) => +el[column] === +number);
-      break;
+      return filterByNumbers;
     default:
-      filterByNumbers = list;
-      break;
+      filterByNumbers = list.filter((el) => +el[column] > +number);
     }
     console.log('att', filterByNumbers);
     return filterByNumbers;
@@ -70,7 +66,7 @@ function Table() {
     return comparisonFiltered;
   }
 
-  if (error) { <h1>Algo deu errado!</h1>; }
+  if (error) return <h1>Algo deu errado!</h1>;
 
   return (
     <div>
